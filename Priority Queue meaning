@@ -1,0 +1,378 @@
+A Priority Queue (PQ) is an abstract data structure where:
+
+every element has a priority
+removal happens based on priority, not insertion order
+
+So unlike a normal queue:
+
+Structure	Removal Order
+Queue	FIFO
+Stack	LIFO
+Priority Queue	Highest/Lowest priority first
+Real Life Analogy
+
+Imagine hospital emergency rooms.
+
+Patients arrive in this order:
+
+Mild fever
+Accident victim
+Headache
+Heart attack
+
+Doctor will NOT follow FIFO.
+
+Instead:
+
+Heart attack
+Accident victim
+Fever
+Headache
+
+So:
+
+insertion order ≠ processing order
+priority decides removal
+
+That is exactly a Priority Queue.
+
+Important Thing:
+Priority Queue is NOT a specific data structure
+
+It is a behavior / ADT (Abstract Data Type).
+
+Just like:
+
+Queue = concept
+Stack = concept
+
+Priority Queue only defines:
+
+insert()
+get/remove highest priority item
+
+But HOW internally it is implemented can vary.
+
+Possible implementations:
+
+Array
+Linked List
+Balanced BST
+Heap ← most common and efficient
+
+That is why people say:
+
+Heap is used to implement Priority Queue
+
+NOT:
+
+Heap == Priority Queue
+
+Heap is just the engine behind it.
+
+Core Operations of Priority Queue
+Operation	Meaning
+insert(x)	Add element
+peek()	View highest priority element
+poll()/remove()	Remove highest priority
+isEmpty()	Check empty
+Now Your Biggest Doubt:
+"Who sets the priority?"
+
+YOU do.
+
+Priority is determined using:
+
+natural ordering
+OR
+custom comparator
+1. Natural Ordering (Default)
+
+When using numbers:
+
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+Java automatically uses:
+
+ascending order
+smallest element gets highest priority
+
+Example:
+
+pq.add(30);
+pq.add(10);
+pq.add(20);
+
+System.out.println(pq.poll());
+
+Output:
+
+10
+
+Because:
+
+smaller number = higher priority
+
+This is called:
+
+Min Priority Queue
+Why ascending by default?
+
+Because Java internally uses:
+
+Comparable
+
+For Integer:
+
+10.compareTo(20)
+
+returns negative → means 10 comes before 20.
+
+So natural ascending ordering becomes priority.
+
+Max Priority Queue
+
+If you want:
+
+bigger number = higher priority
+
+You give comparator:
+
+PriorityQueue<Integer> pq =
+    new PriorityQueue<>(Collections.reverseOrder());
+
+Now:
+
+30
+20
+10
+
+gets removed in that order.
+
+VERY IMPORTANT UNDERSTANDING
+
+Priority does NOT mean:
+
+only ascending
+only descending
+
+Priority can be ANY rule.
+
+Examples:
+
+Example 1: Student Marks
+
+Higher marks = higher priority
+
+class Student {
+    int marks;
+}
+
+Comparator:
+
+(a, b) -> b.marks - a.marks
+Example 2: Task Scheduler
+
+Earlier deadline = higher priority
+
+(a, b) -> a.deadline - b.deadline
+Example 3: Shortest Job First (OS)
+
+Smaller execution time = higher priority
+
+(a, b) -> a.time - b.time
+Example 4: Uber Driver Matching
+
+Closest driver = higher priority
+
+(a, b) -> a.distance - b.distance
+So Priority Queue is Basically:
+
+"Remove elements according to some ranking rule."
+
+That ranking rule is decided by:
+
+Comparable
+OR
+Comparator
+Java PriorityQueue Internals
+
+Java class:
+
+PriorityQueue<E>
+
+belongs to:
+
+java.util
+
+Internally implemented using:
+
+Binary Heap
+
+You’ll study that next.
+
+Key Characteristic That Confuses Beginners
+
+Suppose:
+
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+pq.add(30);
+pq.add(10);
+pq.add(20);
+
+System.out.println(pq);
+
+Output may look weird:
+
+[10, 30, 20]
+
+or
+
+[10, 20, 30]
+
+People think:
+
+"Oh it keeps everything sorted"
+
+NO.
+
+VERY IMPORTANT:
+
+Priority Queue is NOT fully sorted
+
+It only guarantees:
+
+Top element = highest priority
+
+Remaining elements may not be fully ordered.
+
+This is because heap only partially maintains order.
+
+Then Why poll() Always Gives Correct Answer?
+
+Because heap guarantees:
+
+root contains highest priority element
+
+Not full sorting.
+
+You’ll deeply understand this once you study heaps.
+
+Time Complexities
+
+(when implemented using heap)
+
+Operation	Complexity
+insert	O(log n)
+poll/remove	O(log n)
+peek	O(1)
+Why Not Use Sorting Instead?
+
+Suppose every insertion sorts array:
+
+Insert = O(n log n)
+
+Too expensive.
+
+Heap gives:
+
+O(log n)
+
+much better.
+
+Common Interview Uses
+
+Priority Queue is EXTREMELY important.
+
+Used in:
+
+Dijkstra Algorithm
+Prim’s Algorithm
+Merge K Sorted Lists
+Top K Frequent Elements
+Median from Data Stream
+Task Scheduling
+CPU Scheduling
+Event Simulation
+Huffman Coding
+Java Example — Min Heap PQ
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+pq.add(40);
+pq.add(10);
+pq.add(30);
+pq.add(20);
+
+while (!pq.isEmpty()) {
+    System.out.println(pq.poll());
+}
+
+Output:
+
+10
+20
+30
+40
+Java Example — Max Heap PQ
+PriorityQueue<Integer> pq =
+    new PriorityQueue<>(Collections.reverseOrder());
+
+pq.add(40);
+pq.add(10);
+pq.add(30);
+pq.add(20);
+
+while (!pq.isEmpty()) {
+    System.out.println(pq.poll());
+}
+
+Output:
+
+40
+30
+20
+10
+Custom Comparator Example
+class Student {
+    String name;
+    int marks;
+
+    Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+PriorityQueue<Student> pq =
+    new PriorityQueue<>((a, b) -> b.marks - a.marks);
+
+pq.add(new Student("A", 70));
+pq.add(new Student("B", 90));
+pq.add(new Student("C", 80));
+
+System.out.println(pq.poll().name);
+
+Output:
+
+B
+
+Because highest marks got highest priority.
+
+One More Important Thing
+Priority Queue vs Heap
+
+This confusion is VERY common.
+
+Priority Queue	Heap
+Abstract behavior	Concrete data structure
+Defines operations	Implements operations
+"What it should do"	"How it does it"
+Can be implemented many ways	One efficient implementation
+
+Same as:
+
+Concept	Implementation
+List	ArrayList
+Queue	LinkedList
+Priority Queue	Heap
